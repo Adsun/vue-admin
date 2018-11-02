@@ -15,9 +15,12 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import layer from 'vue-layer'
+
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
+Vue.prototype.$layer = layer(Vue)
 
 new Vue({
   el: '#app',

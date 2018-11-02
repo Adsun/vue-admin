@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -9,7 +10,7 @@
       highlight-current-row>
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          <el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible = true, select=scope.row">编辑</el-button>
         </template>
       </el-table-column>
       <el-table-column label="Title">
@@ -39,40 +40,56 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+      <el-form :model="select">
+    <el-form-item label="活动名称" :label-width="formLabelWidth">
+      <el-input v-model="select.title" autocomplete="off"></el-input>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
   </div>
+</el-dialog>
+  </div>
+  
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { getList } from "@/api/table";
 
 export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
+        published: "success",
+        draft: "gray",
+        deleted: "danger"
+      };
+      return statusMap[status];
     }
   },
   data() {
     return {
+      select: {
+        tiltle: "test"
+      },
+      dialogFormVisible: false,
       list: null,
       listLoading: true
-    }
+    };
   },
   created() {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
     fetchData() {
-      this.listLoading = true
+      this.listLoading = true;
       getList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.listLoading = false
-      })
+        this.list = response.data.items;
+        this.listLoading = false;
+      });
     }
   }
-}
+};
 </script>
